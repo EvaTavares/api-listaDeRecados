@@ -20,13 +20,14 @@ export class UserController {
       return res.status(StatusCodes.OK).send({
         ok: true,
         message: "Users were sucessfully listed",
-        data: result.map((user) => {
-          return {
-            id: user.toJson().id,
-            name: user.toJson().name,
-            email: user.toJson().email,
-          };
-        }),
+        data: result,
+        // data: result.map((user) => {
+        //   return {
+        //     id: user.toJson().id,
+        //     name: user.toJson().name,
+        //     email: user.toJson().email,
+        //   };
+        // }),
       });
     } catch (error: any) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
@@ -53,6 +54,52 @@ export class UserController {
         ok: true,
         message: "Users was sucessfully obtained",
         data: result.toJson(),
+      });
+    } catch (error: any) {
+      return res.status(StatusCodes.BAD_GATEWAY).send({
+        ok: false,
+        message: error.toString(),
+      });
+    }
+  }
+
+  public login(req: Request, res: Response) {
+    try {
+      const { email, password } = req.body;
+
+      if (!email) {
+        return res.status(StatusCodes.NOT_FOUND).send({
+          ok: false,
+          message: "Invalid email",
+        });
+      }
+      if (!password) {
+        return res.status(StatusCodes.NOT_FOUND).send({
+          ok: false,
+          message: "Invalid password",
+        });
+      }
+
+      const user = users.find((user) => user.email === email);
+
+      if (!user) {
+        return res.status(StatusCodes.NOT_FOUND).send({
+          ok: false,
+          message: "User not found",
+        });
+      }
+
+      if (user.password !== password) {
+        return res.status(StatusCodes.UNAUTHORIZED).send({
+          ok: false,
+          message: "User unauthorized",
+        });
+      }
+
+      return res.status(StatusCodes.OK).send({
+        ok: true,
+        message: "Login succefully done",
+        data: user.toJson(),
       });
     } catch (error: any) {
       return res.status(StatusCodes.BAD_GATEWAY).send({

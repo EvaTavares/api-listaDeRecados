@@ -1,10 +1,15 @@
 import { v4 as createUuid } from "uuid";
 
+enum StatusErrand {
+  ARCHIVED = "A",
+  UNARCHIVED = "UA",
+}
 export class Errand {
   private _id: string;
   constructor(
     private _title: string,
-    private _description: string // private _status: string
+    private _description: string,
+    private _type: StatusErrand
   ) {
     this._id = createUuid();
   }
@@ -29,16 +34,19 @@ export class Errand {
     this._description = description;
   }
 
-  // public get status() {
-  //   return this._status;
-  // }
+  public get type() {
+    return this._type;
+  }
+  public set type(type: StatusErrand) {
+    this._type = type;
+  }
 
   public toJson() {
     return {
       id: this._id,
       title: this._title,
       description: this._description,
-      // status: this._status,
+      type: this._type,
     };
   }
 }

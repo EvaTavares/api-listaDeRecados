@@ -6,7 +6,7 @@ export class User {
   constructor(
     private _name: string,
     private _email: string,
-    private _password: number,
+    private _password: string,
     private _errands: Errand[] = []
   ) {
     this._id = createUuid();
@@ -40,6 +40,7 @@ export class User {
       id: this._id,
       name: this._name,
       email: this._email,
+      password: this._password,
       errands: this._errands,
     };
   }

@@ -5,10 +5,10 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 export class ErrandController {
-  public createErrands(req: Request, res: Response) {
+  public create(req: Request, res: Response) {
     try {
       const { userId } = req.params;
-      const { title, description } = req.body;
+      const { title, description, type } = req.body;
 
       const user = users.find((user) => user.id === userId);
       if (!user) {
@@ -29,8 +29,14 @@ export class ErrandController {
           message: "Description was not provided",
         });
       }
+      if (!type) {
+        return res.status(StatusCodes.BAD_REQUEST).send({
+          ok: false,
+          message: "Type was not provided",
+        });
+      }
 
-      const newErrand = new Errand(title, description);
+      const newErrand = new Errand(title, description, type);
       user.errands?.push(newErrand);
 
       return res.status(StatusCodes.OK).send({
@@ -41,12 +47,12 @@ export class ErrandController {
     } catch (error: any) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         ok: false,
-        message: "esta entrando aqui",
+        message: error.toString(),
       });
     }
   }
 
-  public listErrand(req: Request, res: Response) {
+  public list(req: Request, res: Response) {
     try {
       const { userId, idErrand } = req.params;
 
@@ -79,10 +85,10 @@ export class ErrandController {
     }
   }
 
-  public updateErrand(req: Request, res: Response) {
+  public update(req: Request, res: Response) {
     try {
       const { userId, idErrand } = req.params;
-      const { title, description } = req.body;
+      const { title, description, type } = req.body;
 
       const user = users.find((user) => user.id === userId);
 
@@ -100,7 +106,7 @@ export class ErrandController {
           .send({ ok: false, message: "Errand was not found." });
       }
 
-      if (!title || !description) {
+      if (!title || !description || !type) {
         return res
           .status(StatusCodes.NOT_FOUND)
           .send({ ok: false, message: "Errand is invalid" });
@@ -108,6 +114,7 @@ export class ErrandController {
 
       ErrandIndex.title = title;
       ErrandIndex.description = description;
+      ErrandIndex.type = type;
 
       return res
         .status(StatusCodes.CREATED)
@@ -120,7 +127,7 @@ export class ErrandController {
     }
   }
 
-  public deleteErrand(req: Request, res: Response) {
+  public delete(req: Request, res: Response) {
     try {
       const { userId, idErrand } = req.params;
 
