@@ -4,7 +4,10 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
 export class UserController {
-  public getAllUsers(req: Request, res: Response) {
+  //requecimento criar usuário
+  // e list
+
+  public list(req: Request, res: Response) {
     try {
       const { name, email } = req.query;
 
@@ -37,7 +40,7 @@ export class UserController {
     }
   }
 
-  public listUserId(req: Request, res: Response) {
+  public get(req: Request, res: Response) {
     try {
       const { id } = req.params;
 
@@ -99,7 +102,10 @@ export class UserController {
       return res.status(StatusCodes.OK).send({
         ok: true,
         message: "Login succefully done",
+        //olhar aqui
         data: user.toJson(),
+        id: user.id,
+        name: user.name,
       });
     } catch (error: any) {
       return res.status(StatusCodes.BAD_GATEWAY).send({

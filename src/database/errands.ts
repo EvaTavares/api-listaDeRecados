@@ -1,9 +1,9 @@
 import { Errand } from "../models/errand";
 
 export const errands = [
-  new Errand("compras", "feira do mês"),
-  new Errand("férias", "viagem para paris"),
-  new Errand("Atividade", "finalizar API"),
-  new Errand("estágio", "procurar vagas"),
-  new Errand("lazer", "sextou"),
+  new Errand("compras", "feira do mês", A),
+  new Errand("férias", "viagem para paris", UA),
+  new Errand("Atividade", "finalizar API", A),
+  new Errand("estágio", "procurar vagas", UA),
+  new Errand("lazer", "sextou", A),
 ];

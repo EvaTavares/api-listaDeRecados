@@ -1,18 +1,12 @@
 import express from "express";
-import { UserController } from "./controllers/user.controller";
 import { errandRoutes } from "./routes/errand.routes";
+import { userRoutes } from "./routes/user.routes";
 
 const app = express();
 app.use(express.json());
 
-//List Users
-app.get("/users", new UserController().getAllUsers);
-
-// Listar por id
-app.get("/users/:id", new UserController().listUserId);
-
-app.post("/users/login", new UserController().login);
-
+//Users
+app.use("/user", userRoutes());
 // Errand
 app.use(errandRoutes());
 
