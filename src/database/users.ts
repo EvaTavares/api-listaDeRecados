@@ -1,6 +1,7 @@
+import { Errand } from "../models/errand";
 import { User } from "../models/user";
 
-export const users = [
+export const usersDb = [
   new User("maria", "teste@teste", "2030", []),
   new User("josé", "teste@teste1", "5698", []),
   new User("antonio", "teste@teste2", "5412", []),

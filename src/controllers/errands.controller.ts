@@ -1,4 +1,4 @@
-import { users } from "../database/users";
+import { usersDb } from "../database/users";
 import { Errand } from "../models/errand";
 import { Request, Response } from "express";
 // Constants enumerating the HTTP status codes.
@@ -10,7 +10,7 @@ export class ErrandController {
       const { userId } = req.params;
       const { title, description, type } = req.body;
 
-      const user = users.find((user) => user.id === userId);
+      const user = usersDb.find((user) => user.id === userId);
       if (!user) {
         return res
           .status(StatusCodes.NOT_FOUND)
@@ -56,7 +56,7 @@ export class ErrandController {
     try {
       const { userId, idErrand } = req.params;
 
-      const user = users.find((user) => user.id === userId);
+      const user = usersDb.find((user) => user.id === userId);
 
       if (!user) {
         return res
@@ -90,7 +90,7 @@ export class ErrandController {
       const { userId, idErrand } = req.params;
       const { title, description, type } = req.body;
 
-      const user = users.find((user) => user.id === userId);
+      const user = usersDb.find((user) => user.id === userId);
 
       if (!user) {
         return res
@@ -131,7 +131,7 @@ export class ErrandController {
     try {
       const { userId, idErrand } = req.params;
 
-      const user = users.find((user) => user.id === userId);
+      const user = usersDb.find((user) => user.id === userId);
 
       if (!user) {
         return res

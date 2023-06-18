@@ -1,23 +1,61 @@
-import { users } from "../database/users";
+import { usersDb } from "../database/users";
 import { Request, Response } from "express";
 // Constants enumerating the HTTP status codes.
 import { StatusCodes } from "http-status-codes";
+import { User } from "../models/user";
 
 export class UserController {
-  //requecimento criar usuário
-  // e list
+  public create(req: Request, res: Response) {
+    try {
+      const { name, email, password } = req.body;
+
+      if (!name) {
+        return res.status(StatusCodes.NOT_FOUND).send({
+          ok: false,
+          message: "Invalid name",
+        });
+      }
+      if (!email) {
+        return res.status(StatusCodes.NOT_FOUND).send({
+          ok: false,
+          message: "Invalid email",
+        });
+      }
+      if (!password) {
+        return res.status(StatusCodes.NOT_FOUND).send({
+          ok: false,
+          message: "Invalid password",
+        });
+      }
+
+      const user = new User(name, email, password);
+      usersDb.push(user);
+
+      return res.status(StatusCodes.CREATED).send({
+        ok: true,
+        message: "User succefully done",
+        //olhar aqui
+        data: user.toJson(),
+      });
+    } catch (error: any) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        ok: false,
+        message: error.toString(),
+      });
+    }
+  }
 
   public list(req: Request, res: Response) {
     try {
       const { name, email } = req.query;
 
-      let result = users;
+      let result = usersDb;
 
       if (name) {
-        result = users.filter((user) => user.name === name);
+        result = usersDb.filter((user) => user.name === name);
       }
       if (email) {
-        result = users.filter((user) => user.email === email);
+        result = usersDb.filter((user) => user.email === email);
       }
 
       return res.status(StatusCodes.OK).send({
@@ -44,7 +82,7 @@ export class UserController {
     try {
       const { id } = req.params;
 
-      const result = users.find((user) => user.id === id);
+      const result = usersDb.find((user) => user.id === id);
 
       if (!result) {
         return res.status(StatusCodes.NOT_FOUND).send({
@@ -83,19 +121,19 @@ export class UserController {
         });
       }
 
-      const user = users.find((user) => user.email === email);
+      const user = usersDb.find((user) => user.email === email);
 
       if (!user) {
-        return res.status(StatusCodes.NOT_FOUND).send({
+        return res.status(StatusCodes.UNAUTHORIZED).send({
           ok: false,
-          message: "User not found",
+          message: "Unauthorized access ",
         });
       }
 
       if (user.password !== password) {
         return res.status(StatusCodes.UNAUTHORIZED).send({
           ok: false,
-          message: "User unauthorized",
+          message: "Unauthorized access",
         });
       }
 
@@ -103,7 +141,7 @@ export class UserController {
         ok: true,
         message: "Login succefully done",
         //olhar aqui
-        data: user.toJson(),
+        // data: user.toJson(),
         id: user.id,
         name: user.name,
       });

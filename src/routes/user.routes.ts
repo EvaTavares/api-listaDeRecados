@@ -8,6 +8,7 @@ export const userRoutes = () => {
   app.get("/", new UserController().list);
   // Listar por id
   app.get("/:id", new UserController().get);
+  app.post("/", new UserController().create);
   app.post("/login", new UserController().login);
 
   app.use("/:userId/errand", errandRoutes());

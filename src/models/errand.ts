@@ -1,6 +1,6 @@
 import { v4 as createUuid } from "uuid";
 
-enum StatusErrand {
+export enum StatusErrand {
   ARCHIVED = "A",
   UNARCHIVED = "UA",
 }

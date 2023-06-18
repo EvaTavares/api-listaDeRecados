@@ -7,8 +7,6 @@ app.use(express.json());
 
 //Users
 app.use("/user", userRoutes());
-// Errand
-app.use(errandRoutes());
 
 app.listen(3333, () => {
   console.log("API is running");
