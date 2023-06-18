@@ -1,9 +1,13 @@
 import express from "express";
-import { errandRoutes } from "./routes/errand.routes";
+import cors from "cors";
 import { userRoutes } from "./routes/user.routes";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 //Users
 app.use("/user", userRoutes());
