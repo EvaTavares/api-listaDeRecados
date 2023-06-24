@@ -1,17 +1,21 @@
 import { Router } from "express";
 import { UserController } from "../controllers/user.controller";
 import { errandRoutes } from "./errand.routes";
+import { UserMiddleware } from "../middleware/user.middleware";
 
 export const userRoutes = () => {
   const app = Router();
+  //verificar esse middleware
 
-  app.get("/", new UserController().list);
-  // Listar por id
-  app.get("/:id", new UserController().get);
   app.post("/", new UserController().create);
+  app.get("/", new UserController().list);
+
   app.post("/login", new UserController().login);
 
-  app.use("/:userId/errand", errandRoutes());
+  // Listar por id
+  app.get("/:id", new UserController().get);
+
+  app.use("/:userId/errands", errandRoutes());
 
   return app;
 };

@@ -52,7 +52,32 @@ export class ErrandController {
     }
   }
 
-  public list(req: Request, res: Response) {
+  public listAllErrands(req: Request, res: Response) {
+    try {
+      const { userId } = req.params;
+
+      const user = usersDb.find((user) => user.id === userId);
+
+      if (!user) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .send({ ok: false, message: "User was not found" });
+      }
+
+      return res.status(StatusCodes.OK).send({
+        ok: true,
+        message: "Errand was sucessfully listed",
+        data: user.errands.map((user) => user.toJson()),
+      });
+    } catch (error: any) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        ok: false,
+        message: error.toString(),
+      });
+    }
+  }
+
+  public getErrandById(req: Request, res: Response) {
     try {
       const { userId, idErrand } = req.params;
 
