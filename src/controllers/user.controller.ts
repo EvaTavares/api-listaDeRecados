@@ -140,7 +140,7 @@ export class UserController {
       return res.status(StatusCodes.OK).send({
         ok: true,
         message: "Login succefully done",
-        data: { email: user.email, password: user.password },
+        data: { name: user.name, id: user.id },
       });
     } catch (error: any) {
       return res.status(StatusCodes.BAD_GATEWAY).send({
