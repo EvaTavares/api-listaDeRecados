@@ -1,8 +1,11 @@
 import { usersDb } from "../database/users";
 import { Errand } from "../models/errand";
 import { Request, Response } from "express";
+import { ApiResponse } from "../utils/Http.response.adapter";
 // Constants enumerating the HTTP status codes.
 import { StatusCodes } from "http-status-codes";
+import { UserRepository } from "../repositories/user.repository";
+import { ErrandRepository } from "../repositories/errand.repository";
 
 export class ErrandController {
   public create(req: Request, res: Response) {
@@ -10,45 +13,32 @@ export class ErrandController {
       const { userId } = req.params;
       const { title, description, type } = req.body;
 
-      const user = usersDb.find((user) => user.id === userId);
+      const user = new UserRepository().get(userId);
       if (!user) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ ok: false, message: "User was not found" });
+        return ApiResponse.notFound(res, "User");
       }
 
       if (!title) {
-        return res.status(StatusCodes.BAD_REQUEST).send({
-          ok: false,
-          message: "Title was not provided",
-        });
+        return ApiResponse.fieldNotProvided(res, "Title");
       }
       if (!description) {
-        return res.status(StatusCodes.BAD_REQUEST).send({
-          ok: false,
-          message: "Description was not provided",
-        });
+        return ApiResponse.fieldNotProvided(res, "Description");
       }
+
       if (!type) {
-        return res.status(StatusCodes.BAD_REQUEST).send({
-          ok: false,
-          message: "Type was not provided",
-        });
+        return ApiResponse.fieldNotProvided(res, "Type");
       }
 
       const newErrand = new Errand(title, description, type);
-      user.errands?.push(newErrand);
+      new ErrandRepository().create(newErrand);
 
-      return res.status(StatusCodes.OK).send({
-        ok: true,
-        message: "Errand was sucessfully listed",
-        data: newErrand.toJson(),
-      });
+      return ApiResponse.success(
+        res,
+        "Errand was sucessfully listed",
+        newErrand
+      );
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-        ok: false,
-        message: error.toString(),
-      });
+      return ApiResponse.genericError(res, error);
     }
   }
 
@@ -56,12 +46,10 @@ export class ErrandController {
     try {
       const { userId } = req.params;
 
-      const user = usersDb.find((user) => user.id === userId);
+      const user = new UserRepository().get(userId);
 
       if (!user) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ ok: false, message: "User was not found" });
+        return ApiResponse.notFound(res, "User");
       }
 
       return res.status(StatusCodes.OK).send({
@@ -70,10 +58,7 @@ export class ErrandController {
         data: user.errands.map((user) => user.toJson()),
       });
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-        ok: false,
-        message: error.toString(),
-      });
+      return ApiResponse.genericError(res, error);
     }
   }
 
@@ -81,20 +66,16 @@ export class ErrandController {
     try {
       const { userId, idErrand } = req.params;
 
-      const user = usersDb.find((user) => user.id === userId);
+      const user = new UserRepository().get(userId);
 
       if (!user) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ ok: false, message: "User was not found" });
+        return ApiResponse.notFound(res, "User");
       }
 
       const errandValid = user.errands.find((errand) => errand.id === idErrand);
 
       if (!errandValid) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ ok: false, message: "User was not found." });
+        return ApiResponse.notFound(res, "Errand");
       }
 
       return res.status(StatusCodes.OK).send({
@@ -103,10 +84,7 @@ export class ErrandController {
         data: errandValid.toJson(),
       });
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-        ok: false,
-        message: error.toString(),
-      });
+      return ApiResponse.genericError(res, error);
     }
   }
 
@@ -115,40 +93,34 @@ export class ErrandController {
       const { userId, idErrand } = req.params;
       const { title, description, type } = req.body;
 
-      const user = usersDb.find((user) => user.id === userId);
+      const user = new UserRepository().get(userId);
 
       if (!user) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ ok: false, message: "User was not found" });
+        return ApiResponse.notFound(res, "User");
       }
 
-      const ErrandIndex = user.errands.find((errand) => errand.id === idErrand);
+      const errandRepository = new ErrandRepository();
+      const errand = errandRepository.get(idErrand);
 
-      if (!ErrandIndex) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ ok: false, message: "Errand was not found." });
+      if (!errand) {
+        return ApiResponse.notFound(res, "Errand");
       }
 
       if (!title || !description || !type) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ ok: false, message: "Errand is invalid" });
+        return ApiResponse.invalid(res, "Errand");
       }
 
-      ErrandIndex.title = title;
-      ErrandIndex.description = description;
-      ErrandIndex.type = type;
+      errand.title = title;
+      errand.description = description;
+      errand.type = type;
 
-      return res
-        .status(StatusCodes.CREATED)
-        .send({ ok: true, message: "Errand was successfully updated" });
+      return ApiResponse.success(
+        res,
+        "Errand was successfully updated",
+        errand
+      );
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-        ok: false,
-        message: error.toString(),
-      });
+      return ApiResponse.genericError(res, error);
     }
   }
 
@@ -156,36 +128,28 @@ export class ErrandController {
     try {
       const { userId, idErrand } = req.params;
 
-      const user = usersDb.find((user) => user.id === userId);
+      const user = new UserRepository().get(userId);
 
       if (!user) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ ok: false, message: "User was not found." });
+        return ApiResponse.notFound(res, "User");
       }
 
-      const errandIndex = user.errands.findIndex(
-        (errand) => errand.id === idErrand
+      const errandRepository = new ErrandRepository();
+      const errand = errandRepository.getIndex(idErrand);
+
+      if (errand === -1) {
+        return ApiResponse.notFound(res, "Errand");
+      }
+
+      const deletedErrand = errandRepository.delete(errand);
+
+      return ApiResponse.success(
+        res,
+        "Successfully deleted errand",
+        deletedErrand[0].toJson()
       );
-
-      if (errandIndex === -1) {
-        return res
-          .status(StatusCodes.NOT_FOUND)
-          .send({ ok: false, message: "Errand was not found." });
-      }
-
-      const deletedErrand = user.errands.splice(errandIndex, 1);
-
-      return res.status(StatusCodes.OK).send({
-        ok: true,
-        message: "Successfully deleted errand",
-        data: deletedErrand[0].toJson(),
-      });
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-        ok: false,
-        message: error.toString(),
-      });
+      return ApiResponse.genericError(res, error);
     }
   }
 }
