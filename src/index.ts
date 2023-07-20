@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 //Users
-app.use("/user", userRoutes());
+app.use("/users", userRoutes());
 
 app.listen(process.env.PORT, () => {
   console.log(`Servidor rodando na porta ` + process.env.PORT);
