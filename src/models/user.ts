@@ -39,6 +39,7 @@ export class User {
   public toJson() {
     return {
       id: this._id,
+      name: this._name,
       email: this._email,
       password: this._password,
       errands: this._errands,

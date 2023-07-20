@@ -1,8 +1,8 @@
 import { usersDb } from "../database/users";
 
 export class UserRepository {
-  public get(id: string) {
-    return usersDb.find((user) => user.id === id);
+  public get(userId: string) {
+    return usersDb.find((user) => user.id === userId);
   }
 
   public getByEmail(email: string) {
