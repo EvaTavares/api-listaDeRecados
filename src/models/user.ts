@@ -45,4 +45,10 @@ export class User {
       errands: this._errands,
     };
   }
+
+  public static create(row: any) {
+    const user = new User(row.name, row.email, row.password);
+    user._id = row.id;
+    return user;
+  }
 }

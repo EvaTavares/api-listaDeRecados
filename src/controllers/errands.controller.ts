@@ -1,4 +1,4 @@
-import { usersDb } from "../database/users";
+import { usersDb } from "../data/users";
 import { Errand } from "../models/errand";
 import { Request, Response } from "express";
 import { ApiResponse } from "../utils/Http.response.adapter";
@@ -8,33 +8,32 @@ import { UserRepository } from "../repositories/user.repository";
 import { ErrandRepository } from "../repositories/errand.repository";
 
 export class ErrandController {
-  public create(req: Request, res: Response) {
+  public async create(req: Request, res: Response) {
     try {
       const { userId } = req.params;
       const { title, description, type } = req.body;
 
-      const user = new UserRepository().get(userId);
+      const user = await new UserRepository().get(userId);
+
       if (!user) {
         return ApiResponse.notFound(res, "User");
       }
-
       if (!title) {
         return ApiResponse.fieldNotProvided(res, "Title");
       }
       if (!description) {
         return ApiResponse.fieldNotProvided(res, "Description");
       }
-
       if (!type) {
         return ApiResponse.fieldNotProvided(res, "Type");
       }
 
-      const newErrand = new Errand(title, description, type);
-      new ErrandRepository().create(newErrand);
+      const newErrand = new Errand(title, description, type, user);
+      await new ErrandRepository().create(newErrand);
 
       return ApiResponse.success(
         res,
-        "Errand was sucessfully listed",
+        "Errand was sucessfully created",
         newErrand
       );
     } catch (error: any) {
@@ -124,11 +123,11 @@ export class ErrandController {
     }
   }
 
-  public delete(req: Request, res: Response) {
+  public async delete(req: Request, res: Response) {
     try {
       const { userId, idErrand } = req.params;
 
-      const user = new UserRepository().get(userId);
+      const user = await new UserRepository().get(userId);
 
       if (!user) {
         return ApiResponse.notFound(res, "User");

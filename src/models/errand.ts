@@ -1,4 +1,5 @@
 import { v4 as createUuid } from "uuid";
+import { User } from "./user";
 
 export enum StatusErrand {
   ARCHIVED = "A",
@@ -9,7 +10,8 @@ export class Errand {
   constructor(
     private _title: string,
     private _description: string,
-    private _type: StatusErrand
+    private _type: StatusErrand,
+    private _user: User
   ) {
     this._id = createUuid();
   }
@@ -39,6 +41,9 @@ export class Errand {
   }
   public set type(type: StatusErrand) {
     this._type = type;
+  }
+  public get user(): User {
+    return this._user;
   }
 
   public toJson() {

@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { userRoutes } from "./routes/user.routes";
 import * as dotenv from "dotenv";
+import { Database } from "./database/database.connection";
 
 dotenv.config();
 
@@ -12,6 +13,10 @@ app.use(cors());
 //Users
 app.use("/users", userRoutes());
 
-app.listen(process.env.PORT, () => {
-  console.log(`Servidor rodando na porta ` + process.env.PORT);
+// inicializar o banco de dados, antes do listen
+Database.connect().then(() => {
+  console.log("Database is connected!");
+  app.listen(process.env.PORT, () => {
+    console.log(`Servidor rodando na porta ` + process.env.PORT);
+  });
 });
