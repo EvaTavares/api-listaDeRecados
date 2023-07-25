@@ -1,5 +1,6 @@
 import { v4 as createUuid } from "uuid";
 import { Errand } from "../models/errand";
+import { UserEntity } from "../database/entities/user.entity";
 
 export class User {
   private _id: string;
@@ -12,6 +13,7 @@ export class User {
     this._id = createUuid();
     this._errands = [];
   }
+  // cade o push p dentro desse array?
 
   public get id() {
     return this._id;
@@ -46,7 +48,7 @@ export class User {
     };
   }
 
-  public static create(row: any) {
+  public static create(row: UserEntity) {
     const user = new User(row.name, row.email, row.password);
     user._id = row.id;
     return user;

@@ -16,6 +16,7 @@ const config = new DataSource({
   },
   synchronize: false,
   schema: "listaderecados",
+  entities: ["src/database/entities/**/*.ts"],
 });
 
 export default config;

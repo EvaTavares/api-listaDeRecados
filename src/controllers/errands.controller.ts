@@ -1,5 +1,4 @@
-import { usersDb } from "../data/users";
-import { Errand } from "../models/errand";
+import { Errand, StatusErrand } from "../models/errand";
 import { Request, Response } from "express";
 import { ApiResponse } from "../utils/Http.response.adapter";
 // Constants enumerating the HTTP status codes.
@@ -13,7 +12,7 @@ export class ErrandController {
       const { userId } = req.params;
       const { title, description, type } = req.body;
 
-      const user = await new UserRepository().get(userId);
+      const user = await new UserRepository().getByid(userId);
 
       if (!user) {
         return ApiResponse.notFound(res, "User");
@@ -41,20 +40,38 @@ export class ErrandController {
     }
   }
 
-  public listAllErrands(req: Request, res: Response) {
+  // public listAllErrands(req: Request, res: Response) {
+  //   try {
+  //     const { userId } = req.params;
+
+  //     const user = new UserRepository().get(userId);
+
+  //     if (!user) {
+  //       return ApiResponse.notFound(res, "User");
+  //     }
+
+  //     return res.status(StatusCodes.OK).send({
+  //       ok: true,
+  //       message: "Errand was sucessfully listed",
+  //       data: user.errands.map((user) => user.toJson()),
+  //     });
+  //   } catch (error: any) {
+  //     return ApiResponse.genericError(res, error);
+  //   }
+  // }
+
+  public async list(req: Request, res: Response) {
     try {
       const { userId } = req.params;
+      const { type } = req.query;
 
-      const user = new UserRepository().get(userId);
+      let errands = await new ErrandRepository().list({
+        userId: userId,
+        type: type as StatusErrand,
+      });
 
-      if (!user) {
-        return ApiResponse.notFound(res, "User");
-      }
-
-      return res.status(StatusCodes.OK).send({
-        ok: true,
-        message: "Errand was sucessfully listed",
-        data: user.errands.map((user) => user.toJson()),
+      return ApiResponse.success(res, "Errands successfully listed", {
+        errands: errands.map((errand) => errand.toJson()),
       });
     } catch (error: any) {
       return ApiResponse.genericError(res, error);
@@ -65,7 +82,7 @@ export class ErrandController {
     try {
       const { userId, idErrand } = req.params;
 
-      const user = new UserRepository().get(userId);
+      const user = new UserRepository().getByid(userId);
 
       if (!user) {
         return ApiResponse.notFound(res, "User");
@@ -87,12 +104,12 @@ export class ErrandController {
     }
   }
 
-  public update(req: Request, res: Response) {
+  public async update(req: Request, res: Response) {
     try {
       const { userId, idErrand } = req.params;
       const { title, description, type } = req.body;
 
-      const user = new UserRepository().get(userId);
+      const user = new UserRepository().getByid(userId);
 
       if (!user) {
         return ApiResponse.notFound(res, "User");
@@ -113,10 +130,14 @@ export class ErrandController {
       errand.description = description;
       errand.type = type;
 
+      const errands = await errandRepository.list({
+        userId,
+      });
+
       return ApiResponse.success(
         res,
         "Errand was successfully updated",
-        errand
+        errands.map((errand) => errand.toJson())
       );
     } catch (error: any) {
       return ApiResponse.genericError(res, error);
@@ -127,25 +148,27 @@ export class ErrandController {
     try {
       const { userId, idErrand } = req.params;
 
-      const user = await new UserRepository().get(userId);
+      const user = await new UserRepository().getByid(userId);
 
       if (!user) {
         return ApiResponse.notFound(res, "User");
       }
 
       const errandRepository = new ErrandRepository();
-      const errand = errandRepository.getIndex(idErrand);
+      const delitedErrands = await errandRepository.delete(idErrand);
 
-      if (errand === -1) {
+      if (delitedErrands === 0) {
         return ApiResponse.notFound(res, "Errand");
       }
 
-      const deletedErrand = errandRepository.delete(errand);
+      const errands = await errandRepository.list({
+        userId,
+      });
 
       return ApiResponse.success(
         res,
-        "Successfully deleted errand",
-        deletedErrand[0].toJson()
+        "Errand successfully deleted",
+        errands.map((errand) => errand.toJson())
       );
     } catch (error: any) {
       return ApiResponse.genericError(res, error);

@@ -1,5 +1,6 @@
 import { v4 as createUuid } from "uuid";
 import { User } from "./user";
+import { ErrandEntity } from "../database/entities/errand.entity";
 
 export enum StatusErrand {
   ARCHIVED = "A",
@@ -53,5 +54,17 @@ export class Errand {
       description: this._description,
       type: this._type,
     };
+  }
+
+  public static create(row: ErrandEntity, user: User) {
+    const errand = new Errand(
+      row.title,
+      row.description,
+      row.type as StatusErrand,
+      user
+    );
+    errand._id = row.id;
+
+    return errand;
   }
 }

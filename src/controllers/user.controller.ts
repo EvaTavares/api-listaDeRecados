@@ -7,43 +7,21 @@ import { UserRepository } from "../repositories/user.repository";
 import { ApiResponse } from "../utils/Http.response.adapter";
 
 export class UserController {
-  public create(req: Request, res: Response) {
+  public async create(req: Request, res: Response) {
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, errands } = req.body;
 
-      if (!name) {
-        return res.status(StatusCodes.NOT_FOUND).send({
-          ok: false,
-          message: "Invalid name",
-        });
-      }
-      if (!email) {
-        return res.status(StatusCodes.NOT_FOUND).send({
-          ok: false,
-          message: "Invalid email",
-        });
-      }
-      if (!password) {
-        return res.status(StatusCodes.NOT_FOUND).send({
-          ok: false,
-          message: "Invalid password",
-        });
-      }
-
-      const user = new User(name, email, password);
-      usersDb.push(user);
-
-      return res.status(StatusCodes.CREATED).send({
-        ok: true,
-        message: "User succefully done",
-        //olhar aqui
-        data: user.toJson(),
+      const repository = new UserRepository();
+      const result = await repository.create({
+        name,
+        email,
+        password,
+        errands,
       });
+
+      return ApiResponse.success(res, "ok", result);
     } catch (error: any) {
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
-        ok: false,
-        message: error.toString(),
-      });
+      return ApiResponse.genericError(res, error);
     }
   }
 
@@ -51,10 +29,9 @@ export class UserController {
     try {
       const repository = new UserRepository();
       const result = await repository.list();
+
       // const { name, email } = req.query;
-
       // let result = usersDb;
-
       // if (name) {
       //   result = usersDb.filter((user) => user.name === name);
       // }
@@ -77,15 +54,17 @@ export class UserController {
     }
   }
 
-  public async get(req: Request, res: Response) {
+  public async getById(req: Request, res: Response) {
     try {
       const { id } = req.params;
+
       const repository = new UserRepository();
-      const result = await repository.get(id);
+      const result = await repository.getByid(id);
 
       if (!result) {
         return ApiResponse.notFound(res, "User ");
       }
+
       return ApiResponse.success(
         res,
         "User successfully obtained",
