@@ -13,7 +13,7 @@ export const userRoutes = () => {
   app.post("/login", new UserController().login);
 
   // Listar por id
-  app.get("/:id", new UserController().get);
+  app.get("/:id", new UserController().getById);
 
   app.use("/:userId/errands", errandRoutes());
 

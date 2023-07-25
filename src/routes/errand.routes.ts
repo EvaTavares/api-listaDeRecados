@@ -9,7 +9,7 @@ export const errandRoutes = () => {
 
   app.post("/", [UserMiddleware.validateUser], new ErrandController().create);
   //verificar a rota abaixo no postman
-  app.get("/", new ErrandController().listAllErrands);
+  app.get("/", new ErrandController().list);
 
   app.get("/:idErrand", new ErrandController().getErrandById);
 
