@@ -4,25 +4,25 @@ import { StatusErrand } from "../../models/errand";
 @Entity("errand")
 export class ErrandEntity {
   @PrimaryColumn()
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column()
-  description: string;
+  description!: string;
 
   @Column({
     enum: StatusErrand,
   })
-  type: string;
+  type!: string;
 
   @Column({ name: "id_user" })
-  idUser: string;
+  idUser!: string;
 
-  // @Column({ name: "dthr_criacao" })
-  // dthrCriacao: Data;
+  @Column({ name: "dthr_criacao" })
+  dthrCriacao!: Date;
 
-  // @Column({ name: "dthr_atualizacao" })
-  // dthrAtualizacao: Data;
+  @Column({ name: "dthr_atualizacao" })
+  dthrAtualizacao!: Date;
 }
