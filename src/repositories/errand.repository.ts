@@ -1,9 +1,8 @@
-import { errands } from "../data/errands";
 import { Database } from "../database/config/database.connection";
 import { ErrandEntity } from "../database/entities/errand.entity";
 import { Errand, StatusErrand } from "../models/errand";
 import { User } from "../models/user";
-import { UserRepository } from "./user.repository";
+
 interface ListErrandsParams {
   userId: string;
   type?: StatusErrand;
@@ -11,24 +10,23 @@ interface ListErrandsParams {
 
 export class ErrandRepository {
   // conexão com o BD
-  private connection = Database.connection;
   private repository = Database.connection.getRepository(ErrandEntity);
 
+  // create com ORM
   public async create(errand: Errand) {
-    // errands.push(errand);
-    let query = `insert into listaderecados.errand`;
-    query += `(id, title, description, type, id_user)`;
-    query += `values`;
-    query += `('${errand.id}', '${errand.title}', '${errand.description}', '${errand.type}', '${errand.user.id}')`;
+    // transformou em entity
+    const errandEntity = this.repository.create({
+      id: errand.id,
+      title: errand.title,
+      description: errand.description,
+      type: errand.type,
+      idUser: errand.user.id,
+    });
 
-    await this.connection.query(query);
+    await this.repository.save(errandEntity);
   }
 
-  public async get(idErrand: string) {
-    return errands.find((errand) => errand.id === idErrand);
-  }
-
-  //list
+  //  list com ORM
   public async list(params: ListErrandsParams) {
     const result = await this.repository.findBy({
       idUser: params.userId,
@@ -39,18 +37,27 @@ export class ErrandRepository {
     return result.map((row) => this.mapRowToModel(row));
   }
 
-  public getIndex(idErrand: string) {
-    return errands.findIndex((errand) => errand.id === idErrand);
-  }
-
-  public async delete(id: string) {
-    const result = await this.connection.query(
-      `delete from listaderecados.errand where id = '${id}'`
+  // update com ORM
+  public async get(errand: Errand) {
+    await this.repository.update(
+      {
+        id: errand.id,
+      },
+      {
+        title: errand.title,
+        description: errand.description,
+        type: errand.type,
+      }
     );
-    return result.rowCount;
   }
 
-  private mapRowToModel(row: any) {
+  // delete com ORM
+  public async delete(id: string) {
+    const result = await this.repository.delete(id);
+    return result.affected ?? 0;
+  }
+
+  private mapRowToModel(row: any): Errand {
     // const user = UserRepository.mapRowToModel(row);
 
     // todo: depois voltar a afazer o maprowtomodel do user

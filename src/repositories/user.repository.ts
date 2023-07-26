@@ -13,7 +13,7 @@ export class UserRepository {
     return result.map((entity) => UserRepository.mapRowToModel(entity));
     // list retorna um User[] - informações de models
   }
-
+  // com ORM
   public async getByid(id: string) {
     //antes era assim =>  const result = await this.connection.query(`select * from listaderecados.user where id = '${id}'`);
     const result = await this.repository.findOneBy({ id });

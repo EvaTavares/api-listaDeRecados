@@ -40,26 +40,6 @@ export class ErrandController {
     }
   }
 
-  // public listAllErrands(req: Request, res: Response) {
-  //   try {
-  //     const { userId } = req.params;
-
-  //     const user = new UserRepository().get(userId);
-
-  //     if (!user) {
-  //       return ApiResponse.notFound(res, "User");
-  //     }
-
-  //     return res.status(StatusCodes.OK).send({
-  //       ok: true,
-  //       message: "Errand was sucessfully listed",
-  //       data: user.errands.map((user) => user.toJson()),
-  //     });
-  //   } catch (error: any) {
-  //     return ApiResponse.genericError(res, error);
-  //   }
-  // }
-
   public async list(req: Request, res: Response) {
     try {
       const { userId } = req.params;
@@ -116,7 +96,8 @@ export class ErrandController {
       }
 
       const errandRepository = new ErrandRepository();
-      const errand = errandRepository.get(idErrand);
+      // tem que ser do tipo errand | undefined
+      const errand = await errandRepository.get(idErrand);
 
       if (!errand) {
         return ApiResponse.notFound(res, "Errand");
@@ -128,7 +109,10 @@ export class ErrandController {
 
       errand.title = title;
       errand.description = description;
-      errand.type = type;
+      errand.type = type as StatusErrand;
+
+      // salvar...
+      await errandRepository.update(errand);
 
       const errands = await errandRepository.list({
         userId,

@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
+import { UserEntity } from "../entities/user.entity";
+import { ErrandEntity } from "../entities/errand.entity";
 
 dotenv.config();
 
