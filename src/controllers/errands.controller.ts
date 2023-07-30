@@ -1,6 +1,6 @@
 import { Errand, StatusErrand } from "../models/errand";
 import { Request, Response } from "express";
-import { ApiResponse } from "../utils/Http.response.adapter";
+import { ApiResponse } from "../utils/Api.response.adapter";
 // Constants enumerating the HTTP status codes.
 import { StatusCodes } from "http-status-codes";
 import { UserRepository } from "../repositories/user.repository";
@@ -12,19 +12,10 @@ export class ErrandController {
       const { userId } = req.params;
       const { title, description, type } = req.body;
 
-      const user = await new UserRepository().getByid(userId);
+      const user = await new UserRepository().getById(userId);
 
       if (!user) {
         return ApiResponse.notFound(res, "User");
-      }
-      if (!title) {
-        return ApiResponse.fieldNotProvided(res, "Title");
-      }
-      if (!description) {
-        return ApiResponse.fieldNotProvided(res, "Description");
-      }
-      if (!type) {
-        return ApiResponse.fieldNotProvided(res, "Type");
       }
 
       const newErrand = new Errand(title, description, type, user);
@@ -58,38 +49,39 @@ export class ErrandController {
     }
   }
 
-  public getErrandById(req: Request, res: Response) {
-    try {
-      const { userId, idErrand } = req.params;
+  // public async getErrandById(req: Request, res: Response) {
+  //   try {
+  //     const { userId, idErrand } = req.params;
 
-      const user = new UserRepository().getByid(userId);
+  //     const user = new UserRepository().getById(userId);
 
-      if (!user) {
-        return ApiResponse.notFound(res, "User");
-      }
+  //     if (!user) {
+  //       return ApiResponse.notFound(res, "User");
+  //     }
 
-      const errandValid = user.errands.find((errand) => errand.id === idErrand);
+  //     const errandRepository = new ErrandRepository();
+  //     const errand = await errandRepository.getByIdErrand(idErrand);
 
-      if (!errandValid) {
-        return ApiResponse.notFound(res, "Errand");
-      }
+  //     if (!errand) {
+  //       return ApiResponse.notFound(res, "Errand");
+  //     }
 
-      return res.status(StatusCodes.OK).send({
-        ok: true,
-        message: "Errand was sucessfully listed",
-        data: errandValid.toJson(),
-      });
-    } catch (error: any) {
-      return ApiResponse.genericError(res, error);
-    }
-  }
+  //     return ApiResponse.success(
+  //       res,
+  //       "Errand was sucessfully obtened",
+  //       errand.toJson()
+  //     );
+  //   } catch (error: any) {
+  //     return ApiResponse.genericError(res, error);
+  //   }
+  // }
 
   public async update(req: Request, res: Response) {
     try {
       const { userId, idErrand } = req.params;
-      const { title, description, type } = req.body;
+      const { title, description } = req.body;
 
-      const user = new UserRepository().getByid(userId);
+      const user = new UserRepository().getById(userId);
 
       if (!user) {
         return ApiResponse.notFound(res, "User");
@@ -97,25 +89,24 @@ export class ErrandController {
 
       const errandRepository = new ErrandRepository();
       // tem que ser do tipo errand | undefined
-      const errand = await errandRepository.get(idErrand);
+      const errand = await errandRepository.getByIdErrand(idErrand);
 
       if (!errand) {
         return ApiResponse.notFound(res, "Errand");
       }
 
-      if (!title || !description || !type) {
+      if (!title || !description) {
         return ApiResponse.invalid(res, "Errand");
       }
 
       errand.title = title;
       errand.description = description;
-      errand.type = type as StatusErrand;
 
       // salvar...
       await errandRepository.update(errand);
 
       const errands = await errandRepository.list({
-        userId,
+        userId: userId,
       });
 
       return ApiResponse.success(
@@ -132,7 +123,7 @@ export class ErrandController {
     try {
       const { userId, idErrand } = req.params;
 
-      const user = await new UserRepository().getByid(userId);
+      const user = await new UserRepository().getById(userId);
 
       if (!user) {
         return ApiResponse.notFound(res, "User");
