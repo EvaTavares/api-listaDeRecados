@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { ApiResponse } from "../utils/Api.response.adapter";
+import { usersDb } from "../data/users";
 
 export class UserMiddleware {
   public static validateUser(req: Request, res: Response, next: NextFunction) {
@@ -17,6 +19,46 @@ export class UserMiddleware {
         ok: false,
         message: error.toString(),
       });
+    }
+  }
+
+  public static validateUserEmail(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        return ApiResponse.fieldNotProvided(res, "E-mail");
+      }
+
+      if (usersDb.some((user) => user.email === email)) {
+        return ApiResponse.invalid(res, "E-mail");
+      }
+
+      next();
+    } catch (error: any) {
+      return ApiResponse.genericError(res, error);
+    }
+  }
+
+  public static validateUserPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { password } = req.body;
+
+      if (!password) {
+        return ApiResponse.fieldNotProvided(res, "Password");
+      }
+
+      next();
+    } catch (error: any) {
+      return ApiResponse.genericError(res, error);
     }
   }
 }
