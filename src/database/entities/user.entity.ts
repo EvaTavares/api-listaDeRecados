@@ -1,8 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import { ErrandEntity } from "./errand.entity";
 import { BaseEntity } from "./base.entity";
 
-@Entity("user")
+@Entity("users")
 export class UserEntity extends BaseEntity {
   @Column()
   name!: string;

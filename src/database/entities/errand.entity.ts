@@ -1,9 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { Errand, StatusErrand } from "../../models/errand";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { StatusErrand } from "../../models/errand";
 import { UserEntity } from "./user.entity";
 import { BaseEntity } from "./base.entity";
 
-@Entity("errand")
+@Entity("errands")
 export class ErrandEntity extends BaseEntity {
   @Column()
   title!: string;
@@ -14,7 +14,7 @@ export class ErrandEntity extends BaseEntity {
   @Column({
     enum: StatusErrand,
   })
-  type!: StatusErrand;
+  type!: string;
 
   @Column({ name: "id_user", type: "uuid" })
   idUser!: string;
