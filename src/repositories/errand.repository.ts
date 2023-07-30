@@ -20,11 +20,16 @@ export class ErrandRepository {
       id: errand.id,
       title: errand.title,
       description: errand.description,
-      type: errand.type,
+      // type: errand.type,
       idUser: errand.user.id,
     });
 
     await this.repository.save(errandEntity);
+    const result = await this.repository.findOne({
+      where: { id: errand.id },
+      relations: { user: true },
+    });
+    return this.mapRowToModel(result!);
   }
 
   //  list com ORM
@@ -32,7 +37,6 @@ export class ErrandRepository {
     const result = await this.repository.find({
       where: {
         idUser: params.userId,
-        type: params.type,
       },
       relations: {
         user: true,
@@ -63,7 +67,6 @@ export class ErrandRepository {
       {
         title: errand.title,
         description: errand.description,
-        type: errand.type,
       }
     );
   }
@@ -74,8 +77,22 @@ export class ErrandRepository {
     return result.affected ?? 0;
   }
 
-  private mapRowToModel(row: ErrandEntity) {
-    const user = UserRepository.mapRowToModel(row.user);
-    return Errand.create(row, user);
+  //precisa desse?
+
+  public async getByIdErrand(id: string) {
+    const result = await this.repository.findOneBy({
+      id: id,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.mapRowToModel(result);
+  }
+
+  private mapRowToModel(entity: ErrandEntity) {
+    const user = UserRepository.mapRowToModel(entity.user);
+    return Errand.create(entity, user);
   }
 }
