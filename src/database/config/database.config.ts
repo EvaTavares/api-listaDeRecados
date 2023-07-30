@@ -1,9 +1,10 @@
 import { DataSource } from "typeorm";
 import * as dotenv from "dotenv";
-import { UserEntity } from "../entities/user.entity";
-import { ErrandEntity } from "../entities/errand.entity";
 
 dotenv.config();
+
+let entities = ["src/database/entities/**/*.ts"];
+let migrations = ["src/database/migrations/**/*.ts"];
 
 const config = new DataSource({
   type: "postgres",
@@ -16,9 +17,11 @@ const config = new DataSource({
   ssl: {
     rejectUnauthorized: false,
   },
-  synchronize: false,
+  synchronize: false, //espelha as entidades que vc ja tem no BD
   schema: "listaderecados",
-  entities: ["src/database/entities/**/*.ts"],
+  // logging: true, //mostra o sql no terminal
+  entities,
+  migrations,
 });
 
 export default config;
