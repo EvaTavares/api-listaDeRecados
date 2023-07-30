@@ -8,6 +8,7 @@ export enum StatusErrand {
 }
 export class Errand {
   private _id: string;
+
   constructor(
     private _title: string,
     private _description: string,
@@ -40,9 +41,11 @@ export class Errand {
   public get type() {
     return this._type;
   }
+
   public set type(type: StatusErrand) {
     this._type = type;
   }
+
   public get user(): User {
     return this._user;
   }
@@ -53,6 +56,7 @@ export class Errand {
       title: this._title,
       description: this._description,
       type: this._type,
+      user: this._user?.toJson(),
     };
   }
 

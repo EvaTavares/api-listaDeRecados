@@ -19,9 +19,13 @@ export class ErrandMiddleware {
         return ApiResponse.fieldNotProvided(res, "Description");
       }
 
-      const types = Object.values(Errand);
+      if (!type) {
+        return ApiResponse.fieldNotProvided(res, "Type");
+      }
 
-      if (!types.includes(type)) {
+      const allowedTypes = Object.values(Errand);
+
+      if (!allowedTypes.includes(type)) {
         return ApiResponse.invalid(res, "Type");
       }
 

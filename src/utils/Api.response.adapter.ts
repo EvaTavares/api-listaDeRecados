@@ -42,7 +42,7 @@ export class ApiResponse {
   public static invalidCredentials(res: Response) {
     return res.status(StatusCodes.UNAUTHORIZED).send({
       ok: false,
-      message: "Acesso não autorizado",
+      message: "Unauthorized access",
     });
   }
 

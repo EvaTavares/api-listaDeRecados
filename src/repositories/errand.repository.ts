@@ -46,17 +46,17 @@ export class ErrandRepository {
     return result.map((row) => this.mapRowToModel(row));
   }
 
-  public async get(id: string) {
-    const result = await this.repository.findOneBy({
-      id,
-    });
+  // public async get(id: string) {
+  //   const result = await this.repository.findOneBy({
+  //     id,
+  //   });
 
-    if (!result) {
-      return undefined;
-    }
+  //   if (!result) {
+  //     return undefined;
+  //   }
 
-    return this.mapRowToModel(result);
-  }
+  //   return this.mapRowToModel(result);
+  // }
 
   // update com ORM
   public async update(errand: Errand) {

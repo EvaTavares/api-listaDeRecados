@@ -1,29 +1,25 @@
 import { Router } from "express";
 import { ErrandController } from "../controllers/errands.controller";
 import { UserMiddleware } from "../middleware/user.middleware";
+import { ErrandMiddleware } from "../middleware/errand.middleware";
 
 export const errandRoutes = () => {
   const app = Router({
     mergeParams: true,
   });
 
-  app.post("/", [UserMiddleware.validateUser], new ErrandController().create);
+  app.post(
+    "/",
+    [ErrandMiddleware.validateFieldsCreate],
+    new ErrandController().create
+  );
+
   //verificar a rota abaixo no postman
-  app.get("/", new ErrandController().list);
+  app.get("/", [UserMiddleware.validateUser], new ErrandController().list);
 
-  app.get("/:idErrand", new ErrandController().getErrandById);
+  app.put("/:idErrand", new ErrandController().update);
 
-  app.put(
-    "/:idErrand",
-    [UserMiddleware.validateUser],
-    new ErrandController().update
-  );
-
-  app.delete(
-    "/:idErrand",
-    [UserMiddleware.validateUser],
-    new ErrandController().delete
-  );
+  app.delete("/:idErrand", new ErrandController().delete);
 
   return app;
 };
