@@ -1,46 +1,49 @@
-import { usersDb } from "../data/users";
 import { Database } from "../database/config/database.connection";
 import { UserEntity } from "../database/entities/user.entity";
 import { User } from "../models/user";
 
 export class UserRepository {
-  // padrão data mappear
+  // padrão data mapper
   private repository = Database.connection.getRepository(UserEntity);
 
+  // com ORM
+  public async create(newUser: User) {
+    const UserEntity = this.repository.create({
+      id: newUser.id,
+      email: newUser.email,
+      password: newUser.password,
+    });
+
+    const result = await this.repository.save(UserEntity);
+    return UserRepository.mapRowToModel(result);
+  }
+
+  //com ORM
   public async list() {
-    //antes era assim => const result = await this.connection.query("select * from listaderecados.user");
-    const result = await this.repository.find();
+    const result = await this.repository.find({
+      relations: {
+        errands: true,
+      },
+    });
+
     return result.map((entity) => UserRepository.mapRowToModel(entity));
     // list retorna um User[] - informações de models
   }
+
   // com ORM
-  public async getByid(id: string) {
-    //antes era assim =>  const result = await this.connection.query(`select * from listaderecados.user where id = '${id}'`);
+  public async getById(id: string) {
     const result = await this.repository.findOneBy({ id });
 
     if (!result) {
       return undefined;
     }
-    // preciso do mapeamento do user model
+
     return UserRepository.mapRowToModel(result);
   }
 
-  public async create(newUser: any) {
-    const user = new User(newUser.name, newUser.email, newUser.password);
-    const result = await this.connection.query(
-      `insert into listaderecados.user (name, email,password)
-      values
-      ('${user.name}','${user.email}','${user.password}')
-      `
-    );
-    console.log(result.rows);
-    return result.rows;
-  }
-
+  //com ORM
   public async getByEmail(email: string) {
-    // return usersDb.find((user) => user.email === email);
-    //antes era assim =>  const result = await this.connection.query(`select * from listaderecados.user where id = '${id}'`);
-    const result = await this.repository.findOneBy({ email });
+    const result = await this.repository.findOne({ where: { email } });
 
     if (!result) {
       return undefined;
@@ -49,7 +52,18 @@ export class UserRepository {
     return UserRepository.mapRowToModel(result);
   }
 
-  public static mapRowToModel(row: UserEntity): User {
-    return User.create(row);
+  //com ORM
+  public async getByPassword(password: string) {
+    const result = await this.repository.findOne({ where: { password } });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return UserRepository.mapRowToModel(result);
+  }
+
+  public static mapRowToModel(entity: UserEntity): User {
+    return User.create(entity);
   }
 }

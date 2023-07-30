@@ -2,6 +2,7 @@ import { Database } from "../database/config/database.connection";
 import { ErrandEntity } from "../database/entities/errand.entity";
 import { Errand, StatusErrand } from "../models/errand";
 import { User } from "../models/user";
+import { UserRepository } from "./user.repository";
 
 interface ListErrandsParams {
   userId: string;
@@ -28,17 +29,33 @@ export class ErrandRepository {
 
   //  list com ORM
   public async list(params: ListErrandsParams) {
-    const result = await this.repository.findBy({
-      idUser: params.userId,
-      type: params.type,
+    const result = await this.repository.find({
+      where: {
+        idUser: params.userId,
+        type: params.type,
+      },
+      relations: {
+        user: true,
+      },
     });
-
     // duas tabelas sendo envolvidas
     return result.map((row) => this.mapRowToModel(row));
   }
 
+  public async get(id: string) {
+    const result = await this.repository.findOneBy({
+      id,
+    });
+
+    if (!result) {
+      return undefined;
+    }
+
+    return this.mapRowToModel(result);
+  }
+
   // update com ORM
-  public async get(errand: Errand) {
+  public async update(errand: Errand) {
     await this.repository.update(
       {
         id: errand.id,
@@ -57,11 +74,8 @@ export class ErrandRepository {
     return result.affected ?? 0;
   }
 
-  private mapRowToModel(row: any): Errand {
-    // const user = UserRepository.mapRowToModel(row);
-
-    // todo: depois voltar a afazer o maprowtomodel do user
-    const user = new User("maria", "teste@teste01", "1234");
+  private mapRowToModel(row: ErrandEntity) {
+    const user = UserRepository.mapRowToModel(row.user);
     return Errand.create(row, user);
   }
 }
