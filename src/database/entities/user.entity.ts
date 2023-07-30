@@ -1,10 +1,9 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { ErrandEntity } from "./errand.entity";
+import { BaseEntity } from "./base.entity";
 
 @Entity("user")
-export class UserEntity {
-  @PrimaryColumn()
-  id!: string;
-
+export class UserEntity extends BaseEntity {
   @Column()
   name!: string;
 
@@ -14,6 +13,6 @@ export class UserEntity {
   @Column()
   password!: string;
 
-  @Column({ name: "dthr_criacao" })
-  dthrCriacao!: Date;
+  @OneToMany(() => ErrandEntity, (errand) => errand.user)
+  errands!: ErrandEntity[];
 }

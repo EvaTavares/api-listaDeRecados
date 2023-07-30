@@ -1,11 +1,10 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
-import { StatusErrand } from "../../models/errand";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Errand, StatusErrand } from "../../models/errand";
+import { UserEntity } from "./user.entity";
+import { BaseEntity } from "./base.entity";
 
 @Entity("errand")
-export class ErrandEntity {
-  @PrimaryColumn()
-  id!: string;
-
+export class ErrandEntity extends BaseEntity {
   @Column()
   title!: string;
 
@@ -15,14 +14,12 @@ export class ErrandEntity {
   @Column({
     enum: StatusErrand,
   })
-  type!: string;
+  type!: StatusErrand;
 
-  @Column({ name: "id_user" })
+  @Column({ name: "id_user", type: "uuid" })
   idUser!: string;
 
-  @Column({ name: "dthr_criacao" })
-  dthrCriacao!: Date;
-
-  @Column({ name: "dthr_atualizacao" })
-  dthrAtualizacao!: Date;
+  @ManyToOne(() => UserEntity, (entity) => entity.errands)
+  @JoinColumn({ name: "id_user", referencedColumnName: "id" })
+  user!: UserEntity;
 }
