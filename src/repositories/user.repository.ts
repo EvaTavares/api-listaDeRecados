@@ -9,12 +9,13 @@ export class UserRepository {
   // com ORM
   public async create(newUser: User) {
     const UserEntity = this.repository.create({
-      id: newUser.id,
+      name: newUser.name,
       email: newUser.email,
       password: newUser.password,
     });
 
     const result = await this.repository.save(UserEntity);
+
     return UserRepository.mapRowToModel(result);
   }
 
@@ -25,7 +26,7 @@ export class UserRepository {
         errands: true,
       },
     });
-
+    console.log(result);
     return result.map((entity) => UserRepository.mapRowToModel(entity));
     // list retorna um User[] - informações de models
   }
