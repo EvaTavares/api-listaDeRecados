@@ -20,7 +20,7 @@ export class ErrandRepository {
       id: errand.id,
       title: errand.title,
       description: errand.description,
-      // type: errand.type,
+      type: errand.type,
       idUser: errand.user.id,
     });
 
@@ -46,18 +46,6 @@ export class ErrandRepository {
     return result.map((row) => this.mapRowToModel(row));
   }
 
-  // public async get(id: string) {
-  //   const result = await this.repository.findOneBy({
-  //     id,
-  //   });
-
-  //   if (!result) {
-  //     return undefined;
-  //   }
-
-  //   return this.mapRowToModel(result);
-  // }
-
   // update com ORM
   public async update(errand: Errand) {
     await this.repository.update(
@@ -80,8 +68,13 @@ export class ErrandRepository {
   //precisa desse?
 
   public async getByIdErrand(id: string) {
-    const result = await this.repository.findOneBy({
-      id: id,
+    const result = await this.repository.findOne({
+      where: {
+        id: id,
+      },
+      relations: {
+        user: true,
+      },
     });
 
     if (!result) {

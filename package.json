@@ -14,7 +14,7 @@
     "typeorm:create": "typeorm migration:create",
     "typeorm:run": "npm run typeorm migration:run -- -d ./src/database/config/database.config.ts",
     "typeorm:revert": "npm run typeorm migration:revert -- -d ./src/database/config/database.config.ts",
-    "typeorm:generate": "typeorm-ts-node-esm migration:generate -d ./src/database/config/database.config.ts ./src/database/migrations/CreateTables"
+    "typeorm:generate": "npm run typeorm migration:generate -- -d ./src/database/config/database.config.ts"
   },
   "keywords": [],
   "author": "",

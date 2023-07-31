@@ -24,7 +24,7 @@ export class ErrandController {
       return ApiResponse.success(
         res,
         "Errand was sucessfully created",
-        newErrand
+        newErrand.toJson()
       );
     } catch (error: any) {
       return ApiResponse.genericError(res, error);
@@ -49,39 +49,12 @@ export class ErrandController {
     }
   }
 
-  // public async getErrandById(req: Request, res: Response) {
-  //   try {
-  //     const { userId, idErrand } = req.params;
-
-  //     const user = new UserRepository().getById(userId);
-
-  //     if (!user) {
-  //       return ApiResponse.notFound(res, "User");
-  //     }
-
-  //     const errandRepository = new ErrandRepository();
-  //     const errand = await errandRepository.getByIdErrand(idErrand);
-
-  //     if (!errand) {
-  //       return ApiResponse.notFound(res, "Errand");
-  //     }
-
-  //     return ApiResponse.success(
-  //       res,
-  //       "Errand was sucessfully obtened",
-  //       errand.toJson()
-  //     );
-  //   } catch (error: any) {
-  //     return ApiResponse.genericError(res, error);
-  //   }
-  // }
-
   public async update(req: Request, res: Response) {
     try {
       const { userId, idErrand } = req.params;
       const { title, description } = req.body;
 
-      const user = new UserRepository().getById(userId);
+      const user = await new UserRepository().getById(userId);
 
       if (!user) {
         return ApiResponse.notFound(res, "User");
@@ -90,20 +63,22 @@ export class ErrandController {
       const errandRepository = new ErrandRepository();
       // tem que ser do tipo errand | undefined
       const errand = await errandRepository.getByIdErrand(idErrand);
+      console.log(errand);
 
       if (!errand) {
         return ApiResponse.notFound(res, "Errand");
       }
 
-      if (!title || !description) {
-        return ApiResponse.invalid(res, "Errand");
-      }
+      // if (!title || !description) {
+      //   return ApiResponse.invalid(res, "Errand");
+      // }
 
       errand.title = title;
       errand.description = description;
 
       // salvar...
-      await errandRepository.update(errand);
+      const result = await errandRepository.update(errand);
+      // console.log(result);
 
       const errands = await errandRepository.list({
         userId: userId,

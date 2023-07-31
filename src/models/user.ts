@@ -4,14 +4,12 @@ import { UserEntity } from "../database/entities/user.entity";
 
 export class User {
   private _id: string;
-  private _errands: Errand[];
   constructor(
     private _name: string,
     private _email: string,
     private _password: string
   ) {
     this._id = createUuid();
-    this._errands = [];
   }
   // cade o push p dentro desse array?
 
@@ -34,17 +32,12 @@ export class User {
     return this._password;
   }
 
-  public get errands(): Errand[] {
-    return this._errands;
-  }
-
   public toJson() {
     return {
       id: this._id,
       name: this._name,
       email: this._email,
       password: this._password,
-      errands: this._errands,
     };
   }
 

@@ -12,7 +12,4 @@ export class UserEntity extends BaseEntity {
 
   @Column()
   password!: string;
-
-  @OneToMany(() => ErrandEntity, (errand) => errand.user)
-  errands!: ErrandEntity[];
 }

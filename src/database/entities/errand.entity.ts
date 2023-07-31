@@ -19,7 +19,7 @@ export class ErrandEntity extends BaseEntity {
   @Column({ name: "id_user", type: "uuid" })
   idUser!: string;
 
-  @ManyToOne(() => UserEntity, (entity) => entity.errands)
-  @JoinColumn({ name: "id_user", referencedColumnName: "id" })
+  @ManyToOne(() => UserEntity)
+  @JoinColumn({ name: "id_user" })
   user!: UserEntity;
 }

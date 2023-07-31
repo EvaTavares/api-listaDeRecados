@@ -15,18 +15,14 @@ export class UserRepository {
     });
 
     const result = await this.repository.save(UserEntity);
+    console.log(result);
 
     return UserRepository.mapRowToModel(result);
   }
 
   //com ORM
   public async list() {
-    const result = await this.repository.find({
-      relations: {
-        errands: true,
-      },
-    });
-    console.log(result);
+    const result = await this.repository.find();
     return result.map((entity) => UserRepository.mapRowToModel(entity));
     // list retorna um User[] - informações de models
   }

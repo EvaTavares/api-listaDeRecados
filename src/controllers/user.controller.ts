@@ -11,8 +11,8 @@ export class UserController {
 
       const validEmail = await repository.getByEmail(email);
 
-      if (!validEmail) {
-        return ApiResponse.invalidCredentials(res);
+      if (validEmail) {
+        return ApiResponse.invalid(res, "E-mail");
       }
 
       const user = new User(name, email, password);
@@ -34,7 +34,11 @@ export class UserController {
       const repository = new UserRepository();
       const result = await repository.list();
 
-      return ApiResponse.success(res, "Users were sucessfully listed", result);
+      return ApiResponse.success(
+        res,
+        "Users were sucessfully listed",
+        result.map((user) => user.toJson())
+      );
     } catch (error: any) {
       return ApiResponse.genericError(res, error);
     }
@@ -67,7 +71,7 @@ export class UserController {
     try {
       const { email, password } = req.body;
       const repository = new UserRepository();
-      const login = await new UserRepository().getByEmail(email);
+      const login = await repository.getByEmail(email);
 
       if (!email) {
         return ApiResponse.fieldNotProvided(res, "E-mail");

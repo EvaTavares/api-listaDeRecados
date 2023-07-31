@@ -34,10 +34,6 @@ export class UserMiddleware {
         return ApiResponse.fieldNotProvided(res, "E-mail");
       }
 
-      if (usersDb.some((user) => user.email === email)) {
-        return ApiResponse.invalid(res, "E-mail");
-      }
-
       next();
     } catch (error: any) {
       return ApiResponse.genericError(res, error);

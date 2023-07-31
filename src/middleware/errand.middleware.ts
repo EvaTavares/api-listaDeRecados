@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ApiResponse } from "../utils/Api.response.adapter";
-import { Errand } from "../models/errand";
+import { Errand, StatusErrand } from "../models/errand";
 
 export class ErrandMiddleware {
   public static validateFieldsCreate(
@@ -23,7 +23,7 @@ export class ErrandMiddleware {
         return ApiResponse.fieldNotProvided(res, "Type");
       }
 
-      const allowedTypes = Object.values(Errand);
+      const allowedTypes = Object.values(StatusErrand);
 
       if (!allowedTypes.includes(type)) {
         return ApiResponse.invalid(res, "Type");
