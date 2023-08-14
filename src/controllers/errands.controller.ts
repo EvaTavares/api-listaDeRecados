@@ -1,4 +1,4 @@
-import { Errand, StatusErrand } from "../models/errand";
+import { Errand, StatusErrand } from "../app/models/errand";
 import { Request, Response } from "express";
 import { ApiResponse } from "../utils/Api.response.adapter";
 // Constants enumerating the HTTP status codes.

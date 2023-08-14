@@ -1,6 +1,6 @@
 import { Database } from "../main/database/database.connection";
 import { UserEntity } from "../database/entities/user.entity";
-import { User } from "../models/user";
+import { User } from "../app/models/user";
 
 export class UserRepository {
   // padrão data mapper

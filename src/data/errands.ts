@@ -1,4 +1,4 @@
-import { Errand, StatusErrand } from "../models/errand";
+import { Errand, StatusErrand } from "../app/models/errand";
 
 export const errands = [
   // new Errand("compras", "feira do mês", StatusErrand.ARCHIVED),

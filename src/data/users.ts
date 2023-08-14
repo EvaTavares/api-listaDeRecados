@@ -1,4 +1,4 @@
-import { User } from "../models/user";
+import { User } from "../app/models/user";
 
 export const usersDb = [
   new User("maria", "teste@teste", "2030"),

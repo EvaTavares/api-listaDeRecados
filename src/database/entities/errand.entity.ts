@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { StatusErrand } from "../../models/errand";
+import { StatusErrand } from "../../app/models/errand";
 import { UserEntity } from "./user.entity";
 import { BaseEntity } from "./base.entity";
 
