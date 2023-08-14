@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { UserController } from "../controllers/user.controller";
 import { UserMiddleware } from "../validators/user.middleware";
-import { errandRoutes } from "../../../../routes/errand.routes";
+import { errandRoutes } from "../../errand/routes/errand.routes";
 
 export const userRoutes = () => {
   const app = Router();

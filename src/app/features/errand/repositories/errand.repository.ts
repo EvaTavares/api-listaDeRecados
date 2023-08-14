@@ -1,9 +1,9 @@
-import { Database } from "../main/database/database.connection";
+import { Database } from "../../../../main/database/database.connection";
 
-import { Errand, StatusErrand } from "../app/models/errand";
+import { Errand, StatusErrand } from "../../../models/errand";
 
-import { UserRepository } from "../app/features/user/repositories/user.repository";
-import { ErrandEntity } from "../app/shared/database/entities/errand.entity";
+import { UserRepository } from "../../user/repositories/user.repository";
+import { ErrandEntity } from "../../../shared/database/entities/errand.entity";
 
 interface ListErrandsParams {
   userId: string;

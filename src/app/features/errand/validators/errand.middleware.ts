@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { ApiResponse } from "../app/shared/util/Api.response.adapter";
-import { Errand, StatusErrand } from "../app/models/errand";
+import { ApiResponse } from "../../../shared/util/Api.response.adapter";
+import { Errand, StatusErrand } from "../../../models/errand";
 
 export class ErrandMiddleware {
   public static validateFieldsCreate(
