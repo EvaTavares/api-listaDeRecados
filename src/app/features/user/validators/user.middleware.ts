@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { ApiResponse } from "../app/shared/util/Api.response.adapter";
-import { usersDb } from "../data/users";
+import { ApiResponse } from "../../../shared/util/Api.response.adapter";
+import { usersDb } from "../../../../data/users";
 
 export class UserMiddleware {
   public static validateUser(req: Request, res: Response, next: NextFunction) {

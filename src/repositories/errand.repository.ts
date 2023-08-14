@@ -2,7 +2,7 @@ import { Database } from "../main/database/database.connection";
 
 import { Errand, StatusErrand } from "../app/models/errand";
 
-import { UserRepository } from "./user.repository";
+import { UserRepository } from "../app/features/user/repositories/user.repository";
 import { ErrandEntity } from "../app/shared/database/entities/errand.entity";
 
 interface ListErrandsParams {

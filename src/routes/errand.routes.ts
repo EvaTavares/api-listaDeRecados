@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { ErrandController } from "../controllers/errands.controller";
-import { UserMiddleware } from "../middleware/user.middleware";
+import { UserMiddleware } from "../app/features/user/validators/user.middleware";
 import { ErrandMiddleware } from "../middleware/errand.middleware";
 
 export const errandRoutes = () => {

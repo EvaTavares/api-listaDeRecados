@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { ApiResponse } from "../app/shared/util/Api.response.adapter";
 // Constants enumerating the HTTP status codes.
 import { StatusCodes } from "http-status-codes";
-import { UserRepository } from "../repositories/user.repository";
+import { UserRepository } from "../app/features/user/repositories/user.repository";
 import { ErrandRepository } from "../repositories/errand.repository";
 
 export class ErrandController {
