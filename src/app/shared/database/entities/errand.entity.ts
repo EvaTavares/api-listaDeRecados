@@ -1,7 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
-import { StatusErrand } from "../../app/models/errand";
+
 import { UserEntity } from "./user.entity";
 import { BaseEntity } from "./base.entity";
+import { StatusErrand } from "../../../models/errand";
 
 @Entity("errands")
 export class ErrandEntity extends BaseEntity {

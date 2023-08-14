@@ -1,6 +1,6 @@
 import { Errand, StatusErrand } from "../app/models/errand";
 import { Request, Response } from "express";
-import { ApiResponse } from "../utils/Api.response.adapter";
+import { ApiResponse } from "../app/shared/util/Api.response.adapter";
 // Constants enumerating the HTTP status codes.
 import { StatusCodes } from "http-status-codes";
 import { UserRepository } from "../repositories/user.repository";

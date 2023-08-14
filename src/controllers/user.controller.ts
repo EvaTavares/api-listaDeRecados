@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserRepository } from "../repositories/user.repository";
-import { ApiResponse } from "../utils/Api.response.adapter";
+import { ApiResponse } from "../app/shared/util/Api.response.adapter";
 import { User } from "../app/models/user";
 
 export class UserController {
