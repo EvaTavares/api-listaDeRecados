@@ -2,9 +2,10 @@ import { Errand, StatusErrand } from "../../../models/errand";
 import { Request, Response } from "express";
 import { ApiResponse } from "../../../shared/util/Api.response.adapter";
 // Constants enumerating the HTTP status codes.
-import { StatusCodes } from "http-status-codes";
 import { UserRepository } from "../../user/repositories/user.repository";
 import { ErrandRepository } from "../repositories/errand.repository";
+import { UpdateErrandUsecase } from "../usecases/update-errand.usecase";
+import { Return } from "../../../shared/util/return.adapter";
 
 export class ErrandController {
   public async create(req: Request, res: Response) {
@@ -49,48 +50,22 @@ export class ErrandController {
     }
   }
 
+  // com usecase
   public async update(req: Request, res: Response) {
     try {
       const { userId, idErrand } = req.params;
       const { title, description } = req.body;
 
-      const user = await new UserRepository().getById(userId);
-
-      if (!user) {
-        return ApiResponse.notFound(res, "User");
-      }
-
-      const errandRepository = new ErrandRepository();
-      // tem que ser do tipo errand | undefined
-      const errand = await errandRepository.getByIdErrand(idErrand);
-      console.log(errand);
-
-      if (!errand) {
-        return ApiResponse.notFound(res, "Errand");
-      }
-
-      // if (!title || !description) {
-      //   return ApiResponse.invalid(res, "Errand");
-      // }
-
-      errand.title = title;
-      errand.description = description;
-
-      // salvar...
-      const result = await errandRepository.update(errand);
-      // console.log(result);
-
-      const errands = await errandRepository.list({
-        userId: userId,
+      const result = await new UpdateErrandUsecase().execute({
+        title,
+        description,
+        userId,
+        idErrand,
       });
 
-      return ApiResponse.success(
-        res,
-        "Errand was successfully updated",
-        errands.map((errand) => errand.toJson())
-      );
+      return res.status(result.code).send(result);
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return Return.genericError(error);
     }
   }
 
