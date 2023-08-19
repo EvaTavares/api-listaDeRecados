@@ -5,7 +5,6 @@ import { ApiResponse } from "../../../shared/util/Api.response.adapter";
 import { UserRepository } from "../../user/repositories/user.repository";
 import { ErrandRepository } from "../repositories/errand.repository";
 import { UpdateErrandUsecase } from "../usecases/update-errand.usecase";
-import { Return } from "../../../shared/util/return.adapter";
 
 export class ErrandController {
   public async create(req: Request, res: Response) {
@@ -65,7 +64,7 @@ export class ErrandController {
 
       return res.status(result.code).send(result);
     } catch (error: any) {
-      return Return.genericError(error);
+      return ApiResponse.genericError(res, error);
     }
   }
 
