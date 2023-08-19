@@ -1,31 +1,23 @@
 import { Request, Response } from "express";
 import { UserRepository } from "../repositories/user.repository";
-import { ApiResponse } from "../../../shared/util/Api.response.adapter";
-import { User } from "../../../models/user";
+import { ApiResponse, UsecaseResponse } from "../../../shared/util/index";
 import { ListUsersUsecase } from "../usecases/list-users.usecase";
 import { LoginUsecase } from "../usecases/login.usercase";
-import { Return } from "../../../shared/util/return.adapter";
+import { CreateUsersUsecase } from "../usecases/create-users.usecase";
 
 export class UserController {
+  // ok com usecase
   public async create(req: Request, res: Response) {
     try {
       const { name, email, password } = req.body;
-      const repository = new UserRepository();
-
-      const validEmail = await repository.getByEmail(email);
-
-      if (validEmail) {
-        return ApiResponse.invalid(res, "E-mail");
+      //   validações...vai para os validators
+      if (!email) {
+        return ApiResponse.fieldNotProvided(res, "Email");
       }
 
-      const user = new User(name, email, password);
-      const result = await repository.create(user);
+      const result = await new CreateUsersUsecase().execute(req.body);
 
-      return ApiResponse.success(
-        res,
-        "User successufully created",
-        result.toJson()
-      );
+      return res.status(result.code).send(result);
     } catch (error: any) {
       return ApiResponse.genericError(res, error);
     }
@@ -46,7 +38,7 @@ export class UserController {
       // return ApiResponse.success(res,"Users were sucessfully listed",result.map((user) => user.toJson()));
       return res.status(result.code).send(result);
     } catch (error: any) {
-      return Return.genericError(error);
+      return ApiResponse.genericError(res, error);
     }
   }
 
@@ -72,27 +64,29 @@ export class UserController {
     }
   }
 
-  // ok
+  // ok -. usecase
   public async login(req: Request, res: Response) {
     try {
       // 1- obter os parametos
       const { email, password } = req.body;
 
       if (!email) {
-        return Return.fieldNotProvided("E-mail");
+        return ApiResponse.fieldNotProvided(res, "E-mail");
       }
       if (!password) {
-        return Return.fieldNotProvided("Password");
+        return ApiResponse.fieldNotProvided(res, "Password");
       }
 
       //  2 - chamar o usecase
-      const result = await new LoginUsecase().execute(req.body);
+      const result = await new LoginUsecase().execute({
+        email,
+        password,
+      });
 
       // retornar uma resposta
       return res.status(result.code).send(result);
     } catch (error: any) {
-      return Return.genericError(error);
-      // return ApiResponse.genericError(res, error);
+      return ApiResponse.genericError(res, error);
     }
   }
 }
