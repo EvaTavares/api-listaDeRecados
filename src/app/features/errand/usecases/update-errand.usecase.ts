@@ -1,5 +1,5 @@
 import { Result } from "../../../shared/contracts/result.contract";
-import { Return } from "../../../shared/util/return.adapter";
+import { UsecaseResponse } from "../../../shared/util/response.adapter";
 import { UserRepository } from "../../user/repositories/user.repository";
 import { ErrandRepository } from "../repositories/errand.repository";
 
@@ -21,7 +21,7 @@ export class UpdateErrandUsecase {
     const user = await new UserRepository().getById(params.userId);
 
     if (!user) {
-      return Return.notFound("User");
+      return UsecaseResponse.notFound("User");
     }
 
     //  Busca o recado no BD
@@ -30,7 +30,7 @@ export class UpdateErrandUsecase {
     const errand = await errandRepository.getByIdErrand(params.idErrand);
 
     if (!errand) {
-      return Return.notFound("Errand");
+      return UsecaseResponse.notFound("Errand");
     }
 
     // Apenas atualiza os dados se forem informados nos params
@@ -49,7 +49,7 @@ export class UpdateErrandUsecase {
       userId: params.userId,
     });
 
-    return Return.success(
+    return UsecaseResponse.success(
       "Errand successfully updated",
       errands.map((errand) => errand.toJson())
     );
