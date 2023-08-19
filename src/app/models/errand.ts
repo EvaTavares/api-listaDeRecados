@@ -1,6 +1,6 @@
 import { v4 as createUuid } from "uuid";
 import { User } from "./user";
-import { ErrandEntity } from "../../database/entities/errand.entity";
+import { ErrandEntity } from "../shared/database/entities/errand.entity";
 
 export enum StatusErrand {
   ARCHIVED = "A",
