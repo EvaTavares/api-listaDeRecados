@@ -4,6 +4,7 @@ import { ApiResponse, UsecaseResponse } from "../../../shared/util/index";
 import { ListUsersUsecase } from "../usecases/list-users.usecase";
 import { LoginUsecase } from "../usecases/login.usercase";
 import { CreateUsersUsecase } from "../usecases/create-users.usecase";
+import { LisByIdUsecase } from "../usecases/listById-user.usecase";
 
 export class UserController {
   // ok com usecase
@@ -23,7 +24,7 @@ export class UserController {
     }
   }
 
-  //ok
+  //ok com usecase
   public async list(req: Request, res: Response) {
     try {
       // 1 - obter parâmentros
@@ -42,23 +43,16 @@ export class UserController {
     }
   }
 
-  // ok
+  // ok com usecase
   public async getById(req: Request, res: Response) {
     try {
       const { id } = req.params;
 
-      const repository = new UserRepository();
-      const result = await repository.getById(id);
+      const result = await new LisByIdUsecase().execute({
+        id,
+      });
 
-      if (!result) {
-        return ApiResponse.notFound(res, "User ");
-      }
-
-      return ApiResponse.success(
-        res,
-        "User successfully obtained",
-        result.toJson()
-      );
+      return res.status(result.code).send(result);
     } catch (error: any) {
       return ApiResponse.genericError(res, error);
     }
