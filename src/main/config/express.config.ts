@@ -1,17 +1,23 @@
 import cors from "cors";
-import express, { Express } from "express";
+import express, { Request, Response, Express } from "express";
 import { userRoutes } from "../../app/features/user/routes/user.routes";
 import * as dotenv from "dotenv";
-
 dotenv.config();
 
-export const createApp = () => {
-  const app = express();
-  app.use(express.json());
-  app.use(cors());
+export class Server {
+  public static create() {
+    const app = express();
+    app.use(express.json());
+    app.use(cors());
 
-  //Users
-  app.use("/users", userRoutes());
+    app.use("/users", userRoutes());
 
-  return app;
-};
+    return app;
+  }
+
+  public static listen(app: Express) {
+    app.listen(process.env.PORT, () => {
+      console.log("Servidor rodando na porta " + process.env.PORT + "!");
+    });
+  }
+}
