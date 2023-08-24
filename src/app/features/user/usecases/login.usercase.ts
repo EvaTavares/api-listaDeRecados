@@ -1,5 +1,6 @@
 import { Result } from "../../../shared/contracts/result.contract";
-import { Return } from "../../../shared/util/return.adapter";
+import { UsecaseResponse } from "../../../shared/util";
+
 import { UserRepository } from "../repositories/user.repository";
 
 interface LoginParams {
@@ -12,16 +13,16 @@ export class LoginUsecase {
     const user = await new UserRepository().getByEmail(params.email);
 
     if (!user) {
-      return Return.invalidCredentials();
+      return UsecaseResponse.invalidCredentials();
       // return ApiResponse.invalidCredentials(res);
     }
 
     if (user.password !== params.password) {
-      return Return.invalidCredentials();
+      return UsecaseResponse.invalidCredentials();
       // return ApiResponse.invalidCredentials(res);
     }
 
-    return Return.success("Login feito com sucesso", {
+    return UsecaseResponse.success("Login feito com sucesso", {
       id: user.id,
       name: user.name,
     });
