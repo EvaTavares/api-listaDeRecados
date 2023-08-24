@@ -56,4 +56,19 @@ export class UserMiddleware {
       return ApiResponse.genericError(res, error);
     }
   }
+
+  public static validateUserExist(req: Request, res: Response, next: NextFunction){
+    try {
+      const { email, password } = req.body;
+
+      if(!email || !password){
+        return ApiResponse.notFound(res, "Incorrect filling in any of the fields")
+      }
+
+      next();
+      
+    } catch (error:any) {
+      return ApiResponse.genericError(res, error);      
+    }
+  }
 }
