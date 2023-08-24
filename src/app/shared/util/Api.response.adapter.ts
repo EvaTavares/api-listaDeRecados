@@ -25,10 +25,10 @@ export class ApiResponse {
     });
   }
 
-  public static notFound(res: Response, entity: string) {
+  public static notFound(res: Response, field: string) {
     return res.status(StatusCodes.NOT_FOUND).send({
       ok: false,
-      messagem: entity + "not found",
+      messagem: field + "not found",
     });
   }
 
