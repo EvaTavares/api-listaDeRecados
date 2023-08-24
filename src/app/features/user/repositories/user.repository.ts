@@ -1,20 +1,23 @@
+import { UserEntity } from "../../../../database/entities/user.entity";
 import { Database } from "../../../../main/database/database.connection";
 
 import { User } from "../../../models/user";
-import { UserEntity } from "../../../shared/database/entities/user.entity";
+// import { UserEntity } from "../../../shared/database/entities/user.entity";
 
 export class UserRepository {
   // padrão data mapper
   private repository = Database.connection.getRepository(UserEntity);
 
-  // com ORM
+  // com ORM -> usecase
   public async create(newUser: User) {
     const UserEntity = this.repository.create({
+      id: newUser.id,
       name: newUser.name,
       email: newUser.email,
       password: newUser.password,
     });
 
+    // o save leva para o banco de dados
     const result = await this.repository.save(UserEntity);
     console.log(result);
 
@@ -39,13 +42,10 @@ export class UserRepository {
     return UserRepository.mapRowToModel(result);
   }
 
-  //com ORM
-  public async getByEmail(email: string) {
-    const result = await this.repository.findOne({ where: { email } });
+  //com ORM -> usecase
+  public async getByEmail(email: string): Promise<User | undefined> {
+    const result = await this.repository.findOneBy({ email });
 
-    if (!result) {
-      return undefined;
-    }
     // preciso do mapeamento do user model
     return UserRepository.mapRowToModel(result);
   }
@@ -61,7 +61,11 @@ export class UserRepository {
     return UserRepository.mapRowToModel(result);
   }
 
-  public static mapRowToModel(entity: UserEntity): User {
-    return User.create(entity);
+  public static mapRowToModel(user?: UserEntity | null) {
+    if (!user) {
+      return undefined;
+    }
+
+    return User.create(user);
   }
 }
