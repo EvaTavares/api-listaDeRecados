@@ -1,16 +1,12 @@
 import { Result } from "../../../shared/contracts/result.contract";
+import { Usecase, UsecaseResponse } from "../../../shared/util";
 import { UserRepository } from "../repositories/user.repository";
 
-export class ListUsersUsecase {
+export class ListUsersUsecase implements Usecase {
   public async execute(): Promise<Result> {
     const repository = new UserRepository();
     const result = await repository.list();
 
-    return {
-      ok: true,
-      message: "Users successufully listed",
-      data: result,
-      code: 200,
-    };
+    return UsecaseResponse.success("Users successufully listed", result);
   }
 }
