@@ -1,9 +1,9 @@
+import { ErrandEntity } from "../../../../database/entities/errand.entity";
 import { Database } from "../../../../main/database/database.connection";
 
 import { Errand, StatusErrand } from "../../../models/errand";
 
 import { UserRepository } from "../../user/repositories/user.repository";
-import { ErrandEntity } from "../../../shared/database/entities/errand.entity";
 
 interface ListErrandsParams {
   userId: string;
@@ -87,6 +87,6 @@ export class ErrandRepository {
 
   private mapRowToModel(entity: ErrandEntity) {
     const user = UserRepository.mapRowToModel(entity.user);
-    return Errand.create(entity, user);
+    return Errand.create(entity, user!);
   }
 }

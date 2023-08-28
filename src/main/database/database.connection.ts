@@ -10,5 +10,6 @@ export class Database {
 
   public static async connect() {
     this._connection = await config.initialize();
+    console.log("Database is connected");
   }
 }

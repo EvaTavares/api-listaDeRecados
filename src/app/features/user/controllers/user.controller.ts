@@ -4,7 +4,7 @@ import { ApiResponse, UsecaseResponse } from "../../../shared/util/index";
 import { ListUsersUsecase } from "../usecases/list-users.usecase";
 import { LoginUsecase } from "../usecases/login.usercase";
 import { CreateUsersUsecase } from "../usecases/create-users.usecase";
-import { LisByIdUsecase } from "../usecases/listById-user.usecase";
+import { ListByIdUsecase } from "../usecases/listById-user.usecase";
 
 export class UserController {
   // ok com usecase
@@ -48,7 +48,7 @@ export class UserController {
     try {
       const { id } = req.params;
 
-      const result = await new LisByIdUsecase().execute({
+      const result = await new ListByIdUsecase().execute({
         id,
       });
 
