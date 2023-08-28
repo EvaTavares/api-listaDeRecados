@@ -1,4 +1,5 @@
 import { Result } from "../../../shared/contracts/result.contract";
+import { Usecase } from "../../../shared/util";
 import { UsecaseResponse } from "../../../shared/util/response.adapter";
 import { UserRepository } from "../../user/repositories/user.repository";
 import { ErrandRepository } from "../repositories/errand.repository";
@@ -10,7 +11,7 @@ interface UpdateErrandParams {
   description: string;
 }
 
-export class UpdateErrandUsecase {
+export class UpdateErrandUsecase implements Usecase {
   /**
    * executa o usecase de atualização do errand
    * @param params ID do user e do errand + valores a serem atualizados
