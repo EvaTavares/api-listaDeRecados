@@ -9,14 +9,11 @@ O projeto foi desenvolvido atendendo as boas práticas da arquitetura de código
 A lista de recados consiste em uma API que dispõe a realização de cadastro e listagem de usuários, assim como a criação, listagem, edição e exclusão de recados dos usuários.
 
  
- ### :computer: Visualização Desktop 
+ ### :computer: Visualização da Arquitetura
  ![Arquitetura de código](./src/images/tela1.png)
+
+ ### :computer: Visualização das Features
  ![Arquitetura de código](./src/images/tela2.png)
-
- ###  :iphone: Visualização mobile
-
- ![desktop](./imagens/readme/mobile1.png)
- ![desktop](./imagens/readme/mobile2.png)
 
 
 ## :books: Funcionalidades
@@ -27,12 +24,26 @@ A lista de recados consiste em uma API que dispõe a realização de cadastro e 
 * Os usuários necessitam realizar um login para que tenham acesso as funcionalidades na aplicação.
 * Os usuários podem criar, listar, editar e deletar (CRUD) os seus recados.
 
+## Installation
+
+```bash
+$ npm install
+```
+## Running the app
+
+```bash
+# development
+$ npm run dev
+```
+
 ##  :wrench: Tecnologias utilizadas
 
-* ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
-* ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
-* ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-* ![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
+[![NodejsBadge](https://img.shields.io/badge/-Nodejs-339933?style=flat-square&logo=Node.js&logoColor=white)](#)
+[![TypeScript Badge](https://img.shields.io/badge/-TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](#)
+[![Git Badge](https://img.shields.io/badge/-Git-black?style=flat-square&logo=git)](#)
+[![GitHub Badge](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)](#)
+[![VSCode Badge](https://img.shields.io/badge/-VSCode-007ACC?style=flat-square&logo=visual-studio-code&logoColor=white)](#)
+[![PostgreSQL Badge](https://img.shields.io/badge/-PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white)](#)
 
 
 ## :dart: Status do projeto
