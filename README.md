@@ -48,3 +48,13 @@ $ npm run dev
 
 ## :dart: Status do projeto
 :construction: Projeto em construção :construction:
+
+
+## :books: License
+
+Copyright © 2023 Eva Tavares
+This project is [MIT](license) licensed.
+
+```
+
+```
