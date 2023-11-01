@@ -10,8 +10,8 @@ A lista de recados consiste em uma API que dispõe a realização de cadastro e 
 
  
  ### :computer: Visualização Desktop 
- !Arquitetura de código](./imagens/readme/desktop.png)
- ![desktop footer](./imagens/readme/desktop2.png)
+ ![Arquitetura de código](./src/images/tela1.png)
+ ![Arquitetura de código](./src/images/tela2.png)
 
  ###  :iphone: Visualização mobile
 
