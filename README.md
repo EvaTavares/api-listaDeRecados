@@ -2,11 +2,14 @@
 Projeto de back-end onde criei uma api com Typescript, utilizando TypeORM.
 
 ## :memo: Descrição
-Projeto de api-listaDeRecados - É uma API REST que integra uma aplicação NodeJS através do paradigma de Programação Orientada a Objetos com um banco de dados relacional(PostgreSQL) utilizando TypeORM. 
+A API Lista de Recados é uma aplicação RESTful desenvolvida em Node.js, seguindo o paradigma de Programação Orientada a Objetos (POO) e utilizando TypeORM para a integração com um banco de dados relacional (PostgreSQL).
 
-O projeto foi desenvolvido atendendo as boas práticas da arquitetura de código.
+O projeto foi estruturado com base nas melhores práticas de arquitetura de código, garantindo organização, escalabilidade e manutenção eficiente.
 
-A lista de recados consiste em uma API que dispõe a realização de cadastro e listagem de usuários, assim como a criação, listagem, edição e exclusão de recados dos usuários.
+Funcionalidades
+Gerenciamento de Usuários: Cadastro e listagem de usuários.
+Gerenciamento de Recados: Criação, listagem, edição e exclusão de recados vinculados a um usuário.
+Essa API oferece uma base sólida para aplicações que necessitam de um sistema de anotações ou lembretes, proporcionando uma interface confiável para a manipulação de dados.
 
  
  ### :computer: Visualização da Arquitetura
